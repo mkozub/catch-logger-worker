@@ -1,0 +1,8 @@
+name = "catch-logger"
+type = "javascript"
+compatibility_date = "2024-04-30"
+
+[[d1_databases]]
+binding = "DB"  # this is the name used in your Worker code: env.DB
+database_name = "catch_logger_db"
+database_id = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
