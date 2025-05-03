@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Fish Catch Logger</title>
+</head>
+<body>
+  <h1>Log a Fish Catch</h1>
+  <form id="catch-form">
+    <label>
+      Species:
+      <input type="text" name="species" required />
+    </label><br />
+    <label>
+      Minutes ago:
+      <input type="number" name="minutes_ago" min="0" value="0" required />
+    </label><br />
+    <label>
+      Location:
+      <input type="text" name="location" required />
+    </label><br />
+    <button type="submit">Submit</button>
+  </form>
+  <p id="response"></p>
+
+  <script>
+    const form = document.getElementById("catch-form");
+    const responseEl = document.getElementById("response");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(form);
+      const minutesAgo = parseInt(formData.get("minutes_ago"));
+      
+      // Calculate the timestamp based on minutes ago
+      const now = new Date();
+      const catchTime = new Date(now.getTime() - minutesAgo * 60000);
+      
+      const data = {
+        species: formData.get("species"),
+        timestamp: catchTime.toISOString(), // Send full ISO timestamp
+        location: formData.get("location")
+      };
+
+      console.log("Submitting catch data:", data); // Debug log
+
+      const res = await fetch("https://catch-logger-4.kozub-mike.workers.dev", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+
+      const result = await res.json();
+      console.log("Server response:", result); // Debug log
+      responseEl.textContent = result.message || "Logged!";
+    });
+  </script>
+</body>
+</html>
