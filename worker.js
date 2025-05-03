@@ -16,19 +16,29 @@ export default {
         .run();
       } catch (err) {
         console.error("DB insert failed:", err);
-        return new Response("Database error", {
+        return new Response(JSON.stringify({ 
+          success: false, 
+          message: "Database error", 
+          error: err.message 
+        }), {
           status: 500,
-          headers: corsHeaders(),
+          headers: { ...corsHeaders(), "Content-Type": "application/json" },
         });
       }
 
-      return new Response(JSON.stringify({ success: true }), {
+      return new Response(JSON.stringify({ 
+        success: true,
+        message: "Catch logged successfully!"
+      }), {
         status: 200,
         headers: { ...corsHeaders(), "Content-Type": "application/json" },
       });
     }
 
-    return new Response("Method Not Allowed", { status: 405 });
+    return new Response("Method Not Allowed", { 
+      status: 405, 
+      headers: corsHeaders() 
+    });
   },
 };
 
